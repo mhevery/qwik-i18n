@@ -13,12 +13,13 @@
 import { renderToStream, RenderToStreamOptions } from "@builder.io/qwik/server";
 import { manifest } from "@qwik-client-manifest";
 import Root from "./root";
-import "./i18n.dev";
+import { BASE } from "./i18n.dev";
 
 export default function (opts: RenderToStreamOptions) {
   return renderToStream(<Root />, {
     manifest,
     ...opts,
+    base: BASE,
     prefetchStrategy: {
       implementation: {
         linkInsert: null,
