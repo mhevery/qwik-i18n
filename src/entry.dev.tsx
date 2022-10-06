@@ -11,7 +11,6 @@
  */
 import { render, RenderOptions } from "@builder.io/qwik";
 import Root from "./root";
-import "./i18n.dev";
 
 export default function (opts: RenderOptions) {
   return render(document, <Root />, opts);
