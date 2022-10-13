@@ -9,11 +9,15 @@ export default component$(() => {
     <>
       <h1>{$localize`Counter Example`}</h1>
       <div>{$localize`count: ${state.count}`}</div>
-      <button onClick$={() => state.count++}>{$localize`increment`}</button>
+      <button
+        onClick$={async () => state.count++}
+      >{$localize`increment`}</button>
     </>
   );
 });
 
-export const head: DocumentHead = {
-  title: "Qwik Flower",
+export const head: DocumentHead = () => {
+  return {
+    title: $localize`Counter Example`,
+  };
 };

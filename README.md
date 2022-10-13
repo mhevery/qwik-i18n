@@ -95,7 +95,7 @@ Navigate to `http://localhost:5173`. The resulting language should match your br
 Here are the steps to build the application for production.
 
 ```
-yarn build.client && yarn build.server && yarn i18n-translate && yarn server
+yarn build.client && yarn build.server && yarn i18n-translate && yarn serve
 ```
 
 ---

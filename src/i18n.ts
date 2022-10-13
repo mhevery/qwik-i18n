@@ -1,13 +1,17 @@
 import "@angular/localize/init";
 import { loadTranslations } from "@angular/localize";
-import { useEnvData, isInUseContext } from "@builder.io/qwik";
+import {
+  useEnvData,
+  useLang,
+  withLang,
+  useOnDocument,
+  $,
+} from "@builder.io/qwik";
 import type { RenderOptions } from "@builder.io/qwik/server";
 import EN from "./locale/message.en.json";
 import SK from "./locale/message.sk.json";
 import FR from "./locale/message.fr.json";
 import SP from "./locale/message.sp.json";
-
-console.log("Loading translations...");
 
 /**
  * This file is left for the developer to customize to get the behavior they want for localization.
@@ -17,7 +21,6 @@ console.log("Loading translations...");
 const $localizeFn = $localize as any as {
   TRANSLATIONS: Record<string, any>;
   TRANSLATION_BY_LOCALE: Map<string, Record<string, any>>;
-  OVERRIDE_LOCALE: string | undefined;
 };
 
 /**
@@ -28,12 +31,9 @@ const $localizeFn = $localize as any as {
  */
 if (!$localizeFn.TRANSLATION_BY_LOCALE) {
   $localizeFn.TRANSLATION_BY_LOCALE = new Map([["", {}]]);
-  $localizeFn.OVERRIDE_LOCALE = undefined;
   Object.defineProperty($localize, "TRANSLATIONS", {
     get: function () {
-      const locale =
-        $localizeFn.OVERRIDE_LOCALE ||
-        (isInUseContext() ? useEnvData<string>("locale", "") : "");
+      const locale = useLang();
       let translations = $localizeFn.TRANSLATION_BY_LOCALE.get(locale);
       if (!translations) {
         $localizeFn.TRANSLATION_BY_LOCALE.set(locale, (translations = {}));
@@ -47,13 +47,9 @@ if (!$localizeFn.TRANSLATION_BY_LOCALE) {
  * Function used to load all translations variants.
  */
 export function initTranslations() {
+  console.log("Loading translations...");
   [SK, EN, FR, SP].forEach(({ translations, locale }) => {
-    try {
-      $localizeFn.OVERRIDE_LOCALE = locale;
-      loadTranslations(translations);
-    } finally {
-      $localizeFn.OVERRIDE_LOCALE = undefined;
-    }
+    withLang(locale, () => loadTranslations(translations));
   });
 }
 
@@ -64,12 +60,10 @@ export function initTranslations() {
  *
  * @returns The locale to use which will be stored in the `useEnvData('locale')`.
  */
-export function extractLocale({ envData }: RenderOptions): string {
-  const { url, requestHeaders } = envData as {
-    url: string;
-    requestHeaders: Record<string, string>;
-  };
-  const acceptLanguage = requestHeaders && requestHeaders["accept-language"];
+export function extractLang(
+  acceptLanguage: string | undefined | null,
+  url: string
+): string {
   let locale =
     (url && new URL(url).searchParams.get("lang")) ||
     acceptLanguage?.split(",")[0];
@@ -83,7 +77,7 @@ export function extractLocale({ envData }: RenderOptions): string {
       }
     }
   }
-  return locale;
+  return locale || "";
 }
 
 /**
@@ -95,13 +89,22 @@ export function extractLocale({ envData }: RenderOptions): string {
  *
  * @returns The base URL to use for loading the chunks in the browser.
  */
-export function extractBase({ locale, envData }: RenderOptions): string {
+export function extractBase({ envData }: RenderOptions): string {
   const { qwikcity } = envData as {
     qwikcity: { mode: string };
   };
   if (qwikcity.mode === "dev") {
     return "/build";
   } else {
-    return "/build/" + locale;
+    return "/build/" + envData!.lang;
   }
 }
+
+export function useI18n() {
+  const shouldLoad = useEnvData<{ mode: string }>("qwikcity")!.mode == "dev";
+  if (shouldLoad) {
+    useOnDocument("qinit", $(initTranslations));
+  }
+}
+
+initTranslations();
