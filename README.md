@@ -23,7 +23,7 @@ There are two ways to do translation:
 
 We think that the best approach is to use a hybrid approach.
 
-1. During development, use runtime translation.
+1. During development, use runtime translation to make the development easy, and not require extra build steps.
 2. During production use:
    - compile time translation for code sent to the browser. It is important for the user experience to be fast only the compile-time approach can provide the best user experience.
    - runtime translation for server code. Because lazy loading is not of concern on the server, a simpler runtime approach is used. This results in a single binary that needs to be deployed to the server.
@@ -49,8 +49,8 @@ export default component$((props: { name: string }) => {
 The first step in translation is to build the application. Once the artifacts are build the the strings can be extracted for translation.
 
 ```bash
-yarn build.client
-yarn i18n-extract
+npm run build.client
+npm run i18n-extract
 ```
 
 The result of the commands is `src/locale/message.en.json`.
@@ -70,10 +70,10 @@ src/locale/message.sp.json
 The strings need to be inlined into the application. This is done by running the following command:
 
 ```bash
-yarn i18n-translate
+npm run i18n-translate
 ```
 
-The result of this command that the browser chunks are generated once for each locale. For example:
+The result of this command is that the browser chunks are generated once for each locale. For example:
 
 ```bash
 dist/builld/q-*.js  # Original chunks
@@ -85,7 +85,7 @@ dist/builld/sp/q-*.js
 ## Development mode
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 Navigate to `http://localhost:5173`. The resulting language should match your browser language. You can also override the language by adding `?lang=sk` to the URL.
@@ -95,7 +95,7 @@ Navigate to `http://localhost:5173`. The resulting language should match your br
 Here are the steps to build the application for production.
 
 ```
-yarn build.client && yarn build.server && yarn i18n-translate && yarn serve
+npm run build.client && npm run build.server && npm run i18n-translate && npm run serve
 ```
 
 ---
@@ -137,11 +137,11 @@ Inside of you project, you'll see the following directories and files:
 
 ## Add Integrations
 
-Use the `yarn qwik add` command to add other integrations. Some examples of integrations include as a Cloudflare, Netlify or Vercel server, and the Static Site Generator (SSG).
+Use the `npm run qwik add` command to add other integrations. Some examples of integrations include as a Cloudflare, Netlify or Vercel server, and the Static Site Generator (SSG).
 
 ```
 
-yarn qwik add
+npm run qwik add
 
 ```
 
@@ -151,7 +151,7 @@ Development mode uses [Vite's development server](https://vitejs.dev/). For Qwik
 
 ```
 
-yarn dev
+npm run dev
 
 ```
 
@@ -163,7 +163,7 @@ The preview command will create a production build of the client modules, produc
 
 ```
 
-yarn preview
+npm run preview
 
 ```
 
@@ -173,7 +173,7 @@ The production build should generate the client and server modules by running bo
 
 ```
 
-yarn build
+npm run build
 
 ```
 
@@ -183,7 +183,7 @@ This app has a minimal [Express server](https://expressjs.com/) implementation. 
 
 ```
 
-yarn serve
+npm run serve
 
 ```
 

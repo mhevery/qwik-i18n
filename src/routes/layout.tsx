@@ -4,7 +4,7 @@ import Header from "../components/header/header";
 import { extractLang } from "../i18n";
 
 export const onRequest: RequestHandler = ({ request, response }) => {
-  response.lang = extractLang(
+  response.locale = extractLang(
     request.headers.get("accept-language"),
     request.url
   );

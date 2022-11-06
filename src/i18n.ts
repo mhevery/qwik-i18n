@@ -2,8 +2,8 @@ import "@angular/localize/init";
 import { loadTranslations } from "@angular/localize";
 import {
   useEnvData,
-  useLang,
-  withLang,
+  getLocale,
+  withLocale,
   useOnDocument,
   $,
 } from "@builder.io/qwik";
@@ -33,7 +33,7 @@ if (!$localizeFn.TRANSLATION_BY_LOCALE) {
   $localizeFn.TRANSLATION_BY_LOCALE = new Map([["", {}]]);
   Object.defineProperty($localize, "TRANSLATIONS", {
     get: function () {
-      const locale = useLang();
+      const locale = getLocale();
       let translations = $localizeFn.TRANSLATION_BY_LOCALE.get(locale);
       if (!translations) {
         $localizeFn.TRANSLATION_BY_LOCALE.set(locale, (translations = {}));
@@ -49,7 +49,7 @@ if (!$localizeFn.TRANSLATION_BY_LOCALE) {
 export function initTranslations() {
   console.log("Loading translations...");
   [SK, EN, FR, SP].forEach(({ translations, locale }) => {
-    withLang(locale, () => loadTranslations(translations));
+    withLocale(locale, () => loadTranslations(translations));
   });
 }
 
@@ -65,7 +65,7 @@ export function extractLang(
   url: string
 ): string {
   let locale =
-    (url && new URL(url).searchParams.get("lang")) ||
+    (url && new URL(url).searchParams.get("locale")) ||
     acceptLanguage?.split(",")[0];
   if (locale) {
     // If we have a locale, make sure it's in the list of supported locales.
