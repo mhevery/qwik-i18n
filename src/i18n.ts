@@ -96,7 +96,7 @@ export function extractBase({ envData }: RenderOptions): string {
   if (qwikcity.mode === "dev") {
     return "/build";
   } else {
-    return "/build/" + envData!.lang;
+    return "/build/" + envData!.locale;
   }
 }
 
