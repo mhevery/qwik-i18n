@@ -5,6 +5,7 @@
     "node": ">=15.0.0"
   },
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "qwik build",
     "build.client": "vite build",
