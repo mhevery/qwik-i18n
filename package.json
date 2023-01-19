@@ -25,8 +25,10 @@
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@builder.io/qwik": "BuilderIO/qwik-build#01953cbb3539faa535bfe6d63c46c5b28982c3ab",
-    "@builder.io/qwik-city": "BuilderIO/qwik-city-build#de97e150dd5cf357fd808554365e555c258c101d",
+    "@angular/compiler": "^14.2.4",
+    "@angular/compiler-cli": "^14.2.4",
+    "@builder.io/qwik": "^0.16.2",
+    "@builder.io/qwik-city": "^0.1.0-beta9",
     "@types/eslint": "8.4.6",
     "@types/express": "4.17.13",
     "@types/node": "latest",
@@ -39,9 +41,7 @@
     "prettier": "2.7.1",
     "typescript": "4.8.3",
     "vite": "3.1.7",
-    "vite-tsconfig-paths": "3.5.0",
-    "@angular/compiler": "^14.2.4",
-    "@angular/compiler-cli": "^14.2.4"
+    "vite-tsconfig-paths": "3.5.0"
   },
   "dependencies": {
     "@angular/localize": "^14.2.4"
