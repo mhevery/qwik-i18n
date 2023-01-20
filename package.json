@@ -44,6 +44,7 @@
     "vite-tsconfig-paths": "3.5.0"
   },
   "dependencies": {
-    "@angular/localize": "^14.2.4"
+    "@angular/localize": "^14.2.4",
+    "compression": "^1.7.4"
   }
 }

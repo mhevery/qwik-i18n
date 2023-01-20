@@ -1,6 +1,6 @@
-import { $, component$, useEnvData, useOnDocument } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
 import {
-  QwikCity,
+  QwikCityProvider,
   RouterOutlet,
   ServiceWorkerRegister,
 } from "@builder.io/qwik-city";
@@ -18,7 +18,7 @@ export default component$(() => {
 
   useI18n();
   return (
-    <QwikCity>
+    <QwikCityProvider>
       <head>
         <meta charSet="utf-8" />
         <RouterHead />
@@ -27,6 +27,6 @@ export default component$(() => {
         <RouterOutlet />
         <ServiceWorkerRegister />
       </body>
-    </QwikCity>
+    </QwikCityProvider>
   );
 });

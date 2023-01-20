@@ -1,12 +1,6 @@
 import "@angular/localize/init";
 import { loadTranslations } from "@angular/localize";
-import {
-  useEnvData,
-  getLocale,
-  withLocale,
-  useOnDocument,
-  $,
-} from "@builder.io/qwik";
+import { getLocale, withLocale, useOnDocument, $ } from "@builder.io/qwik";
 import type { RenderOptions } from "@builder.io/qwik/server";
 import EN from "./locale/message.en.json";
 import SK from "./locale/message.sk.json";
@@ -90,10 +84,7 @@ export function extractLang(
  * @returns The base URL to use for loading the chunks in the browser.
  */
 export function extractBase({ envData }: RenderOptions): string {
-  const { qwikcity } = envData as {
-    qwikcity: { mode: string };
-  };
-  if (qwikcity.mode === "dev") {
+  if (import.meta.env.DEV) {
     return "/build";
   } else {
     return "/build/" + envData!.locale;
@@ -101,8 +92,7 @@ export function extractBase({ envData }: RenderOptions): string {
 }
 
 export function useI18n() {
-  const shouldLoad = useEnvData<{ mode: string }>("qwikcity")!.mode == "dev";
-  if (shouldLoad) {
+  if (import.meta.env.DEV) {
     useOnDocument("qinit", $(initTranslations));
   }
 }
