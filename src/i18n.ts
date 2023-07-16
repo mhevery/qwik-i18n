@@ -2,10 +2,25 @@ import "@angular/localize/init";
 import { loadTranslations } from "@angular/localize";
 import { getLocale, withLocale, useOnDocument, $ } from "@builder.io/qwik";
 import type { RenderOptions } from "@builder.io/qwik/server";
+
+// You must declare all your locales here
 import EN from "./locale/message.en.json";
 import SK from "./locale/message.sk.json";
 import FR from "./locale/message.fr.json";
 import SP from "./locale/message.sp.json";
+
+// Make sure it's obvious when the default locale was selected
+const defaultLocale = 'sk'
+
+/**
+ * Function used to load all translations variants.
+ */
+export function initTranslations() {
+  console.log("Loading translations...");
+  [SK, EN, FR, SP].forEach(({ translations, locale }) => {
+    withLocale(locale, () => loadTranslations(translations));
+  });
+}
 
 /**
  * This file is left for the developer to customize to get the behavior they want for localization.
@@ -37,41 +52,30 @@ if (!$localizeFn.TRANSLATION_BY_LOCALE) {
   });
 }
 
-/**
- * Function used to load all translations variants.
- */
-export function initTranslations() {
-  console.log("Loading translations...");
-  [SK, EN, FR, SP].forEach(({ translations, locale }) => {
-    withLocale(locale, () => loadTranslations(translations));
-  });
+const validateLocale = (locale?: string | null) => {
+  if (!locale) return
+  if ($localizeFn.TRANSLATION_BY_LOCALE.has(locale)) return locale
+  const match = /^([^-])-/.exec(locale)
+  return match && $localizeFn.TRANSLATION_BY_LOCALE.has(match[1]) && match[1]
 }
 
 /**
  * Function used to examine the request and determine the locale to use.
  *
- * This function is meant to be used with `RenderOptions.locale` property
+ * in this implementation, we accept a `?locale=xx` parameter to override
+ * the auto-detected locale requested by the browser.
  *
- * @returns The locale to use which will be stored in the `useEnvData('locale')`.
+ * This function is meant to be used with `RenderOptions.locale` property.
+ * It must always return a valid locale so that prod clients will always get de-$localize-d js
+ *
+ * @returns The locale to use, which will be stored in the render context.
  */
 export function extractLang(
   acceptLanguage: string | undefined | null,
   url: string
 ): string {
-  let locale =
-    (url && new URL(url).searchParams.get("locale")) ||
-    acceptLanguage?.split(",")[0];
-  if (locale) {
-    // If we have a locale, make sure it's in the list of supported locales.
-    if (!$localizeFn.TRANSLATION_BY_LOCALE.has(locale)) {
-      // If not, try to remove sub-locale. (e.g. `en-US` -> `en`)
-      locale = locale.split("-")[0];
-      if (!$localizeFn.TRANSLATION_BY_LOCALE.has(locale)) {
-        locale = ""; // If not, give up and don't translate.
-      }
-    }
-  }
-  return locale || "";
+  return validateLocale(url && new URL(url).searchParams.get("locale")) ||
+    acceptLanguage?.split(",").find(validateLocale) || defaultLocale;
 }
 
 /**
@@ -93,6 +97,7 @@ export function extractBase({ envData }: RenderOptions): string {
 
 export function useI18n() {
   if (import.meta.env.DEV) {
+    // During development only, load all translations in memory
     useOnDocument("qinit", $(initTranslations));
   }
 }
