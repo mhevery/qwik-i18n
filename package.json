@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "build": "qwik build",
-    "build.client": "vite build",
+    "build.client": "vite build && npm run i18n-translate",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build --ssr src/entry.express.tsx",
     "build.types": "tsc --incremental --noEmit",
@@ -29,6 +29,7 @@
     "@angular/compiler-cli": "^14.2.4",
     "@builder.io/qwik": "^0.16.2",
     "@builder.io/qwik-city": "^0.1.0-beta9",
+    "@types/compression": "^1.7.2",
     "@types/eslint": "8.4.6",
     "@types/express": "4.17.13",
     "@types/node": "latest",
