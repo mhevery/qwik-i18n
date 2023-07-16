@@ -29,6 +29,7 @@
     "@angular/compiler-cli": "^14.2.4",
     "@builder.io/qwik": "^0.16.2",
     "@builder.io/qwik-city": "^0.1.0-beta9",
+    "@types/compression": "^1.7.2",
     "@types/eslint": "8.4.6",
     "@types/express": "4.17.13",
     "@types/node": "latest",
