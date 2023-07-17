@@ -16,7 +16,7 @@ const defaultLocale = "sk";
  * Function used to load all translations variants.
  */
 export function initTranslations() {
-  console.log("Loading translations...");
+  console.log("  ➜  Loading translations...");
   [SK, EN, FR, SP].forEach(({ translations, locale }) => {
     // withLocale sets the locale for the duration of the callback
     withLocale(locale, () => loadTranslations(translations));

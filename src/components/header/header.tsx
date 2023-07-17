@@ -1,8 +1,25 @@
-import { component$, useStylesScoped$ } from "@builder.io/qwik";
+import { component$, getLocale, useStylesScoped$ } from "@builder.io/qwik";
 import { QwikLogo } from "../icons/qwik";
 import styles from "./header.css?inline";
 
+const LocaleLink = ({
+  locale,
+  currentLocale,
+}: {
+  locale: string;
+  currentLocale: string;
+}) => (
+  <li>
+    {locale === currentLocale ? (
+      <div>{locale}</div>
+    ) : (
+      <a href={`?locale=${locale}`}>{locale}</a>
+    )}
+  </li>
+);
+
 export default component$(() => {
+  const locale = getLocale();
   useStylesScoped$(styles);
 
   return (
@@ -13,6 +30,10 @@ export default component$(() => {
         </a>
       </div>
       <ul>
+        <LocaleLink locale="en" currentLocale={locale} />
+        <LocaleLink locale="fr" currentLocale={locale} />
+        <LocaleLink locale="sk" currentLocale={locale} />
+        <LocaleLink locale="sp" currentLocale={locale} />
         <li>
           <a
             href="https://qwik.builder.io/docs/components/overview/"
