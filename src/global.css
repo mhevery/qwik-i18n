@@ -15,7 +15,13 @@
 
 body {
   background-color: #fafafa;
-  font-family: 'Poppins', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    "Poppins",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   padding: 20px 20px 40px 20px;
 }
 
@@ -79,7 +85,11 @@ table.commands {
 }
 
 code {
-  font-family: Menlo, Monaco, Courier New, monospace;
+  font-family:
+    Menlo,
+    Monaco,
+    Courier New,
+    monospace;
   font-size: 0.9em;
   background-color: rgb(224, 224, 224);
   padding: 2px 4px;
@@ -113,7 +123,8 @@ a.mindblow {
   font-size: 20px;
   width: fit-content;
   border-bottom: 4px solid black;
-  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>🤯</text></svg>")
+  cursor:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>🤯</text></svg>")
       16 0,
     auto; /*!emojicursor.app*/
 }

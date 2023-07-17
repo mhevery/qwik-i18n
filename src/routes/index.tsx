@@ -1,5 +1,5 @@
 import { component$, useStore } from "@builder.io/qwik";
-import { DocumentHead } from "@builder.io/qwik-city";
+import type { DocumentHead } from "@builder.io/qwik-city";
 
 export default component$(() => {
   const state = useStore({
@@ -19,5 +19,11 @@ export default component$(() => {
 export const head: DocumentHead = () => {
   return {
     title: $localize`Counter Example`,
+    meta: [
+      {
+        name: "description",
+        content: "Qwik site description",
+      },
+    ],
   };
 };
