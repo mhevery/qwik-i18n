@@ -10,14 +10,15 @@ import FR from "./locale/message.fr.json";
 import SP from "./locale/message.sp.json";
 
 // Make sure it's obvious when the default locale was selected
-const defaultLocale = 'sk'
+const defaultLocale = "sk";
 
 /**
  * Function used to load all translations variants.
  */
 export function initTranslations() {
-  console.log("Loading translations...");
+  console.log("  ➜  Loading translations...");
   [SK, EN, FR, SP].forEach(({ translations, locale }) => {
+    // withLocale sets the locale for the duration of the callback
     withLocale(locale, () => loadTranslations(translations));
   });
 }
@@ -36,16 +37,16 @@ const $localizeFn = $localize as any as {
  * This solution uses the `@angular/localize` package for translations, however out of the box
  * `$localize` works with a single translation only. This code adds support for multiple locales
  * concurrently. It does this by intercepting the `TRANSLATIONS` property read and returning
- * appropriate translation based on the current locale which is store in the `usEnvDate('local')`.
+ * appropriate translation based on the current locale.
  */
 if (!$localizeFn.TRANSLATION_BY_LOCALE) {
   $localizeFn.TRANSLATION_BY_LOCALE = new Map([["", {}]]);
-  Object.defineProperty($localize, "TRANSLATIONS", {
+  Object.defineProperty($localizeFn, "TRANSLATIONS", {
     get: function () {
       const locale = getLocale();
-      let translations = $localizeFn.TRANSLATION_BY_LOCALE.get(locale);
+      let translations = this.TRANSLATION_BY_LOCALE.get(locale);
       if (!translations) {
-        $localizeFn.TRANSLATION_BY_LOCALE.set(locale, (translations = {}));
+        this.TRANSLATION_BY_LOCALE.set(locale, (translations = {}));
       }
       return translations;
     },
@@ -53,11 +54,11 @@ if (!$localizeFn.TRANSLATION_BY_LOCALE) {
 }
 
 const validateLocale = (locale?: string | null) => {
-  if (!locale) return
-  if ($localizeFn.TRANSLATION_BY_LOCALE.has(locale)) return locale
-  const match = /^([^-])-/.exec(locale)
-  return match && $localizeFn.TRANSLATION_BY_LOCALE.has(match[1]) && match[1]
-}
+  if (!locale) return;
+  if ($localizeFn.TRANSLATION_BY_LOCALE.has(locale)) return locale;
+  const match = /^([^-;]+)[-;]/.exec(locale);
+  return match && $localizeFn.TRANSLATION_BY_LOCALE.has(match[1]) && match[1];
+};
 
 /**
  * Function used to examine the request and determine the locale to use.
@@ -72,10 +73,22 @@ const validateLocale = (locale?: string | null) => {
  */
 export function extractLang(
   acceptLanguage: string | undefined | null,
-  url: string
+  url: string,
 ): string {
-  return validateLocale(url && new URL(url).searchParams.get("locale")) ||
-    acceptLanguage?.split(",").find(validateLocale) || defaultLocale;
+  let locale;
+
+  if (url) locale = validateLocale(new URL(url).searchParams.get("locale"));
+  if (locale) return locale;
+
+  // Parse the browser accept-language header
+  const locales = acceptLanguage?.split(",");
+  if (locales)
+    for (const entry of locales) {
+      locale = validateLocale(entry);
+      if (locale) return locale;
+    }
+
+  return defaultLocale;
 }
 
 /**
@@ -87,19 +100,21 @@ export function extractLang(
  *
  * @returns The base URL to use for loading the chunks in the browser.
  */
-export function extractBase({ envData }: RenderOptions): string {
+export function extractBase({ serverData }: RenderOptions): string {
   if (import.meta.env.DEV) {
     return "/build";
   } else {
-    return "/build/" + envData!.locale;
+    return "/build/" + serverData!.locale;
   }
 }
 
 export function useI18n() {
   if (import.meta.env.DEV) {
-    // During development only, load all translations in memory
+    // During development only, load all translations in memory when the app starts on the client.
+    // eslint-disable-next-line qwik/use-method-usage
     useOnDocument("qinit", $(initTranslations));
   }
 }
 
-initTranslations();
+// We always need the translations on the server
+if (import.meta.env.SSR) initTranslations();

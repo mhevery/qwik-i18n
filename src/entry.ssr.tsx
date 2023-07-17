@@ -20,12 +20,10 @@ export default function (opts: RenderToStreamOptions) {
     manifest,
     ...opts,
     base: extractBase, // determine the base URL for the client code
-    prefetchStrategy: {
-      implementation: {
-        linkInsert: null,
-        workerFetchInsert: null,
-        prefetchEvent: "always",
-      },
+    // Use container attributes to set attributes on the html tag.
+    containerAttributes: {
+      lang: opts.serverData!.locale,
+      ...opts.containerAttributes,
     },
   });
 }

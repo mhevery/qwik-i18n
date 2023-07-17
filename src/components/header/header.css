@@ -26,7 +26,8 @@ header li {
   padding: 0;
 }
 
-header li a {
+header li a,
+header li div {
   display: inline-block;
   padding: 15px 10px;
   text-decoration: none;
