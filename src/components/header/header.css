@@ -23,13 +23,10 @@ header ul {
 header li {
   display: inline-block;
   margin: 0;
-  padding: 0;
+  padding: 15px 10px;
 }
 
-header li a,
-header li div {
-  display: inline-block;
-  padding: 15px 10px;
+header li a {
   text-decoration: none;
 }
 

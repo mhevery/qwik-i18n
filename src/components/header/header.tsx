@@ -1,25 +1,32 @@
-import { component$, getLocale, useStylesScoped$ } from "@builder.io/qwik";
+import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { QwikLogo } from "../icons/qwik";
 import styles from "./header.css?inline";
+import { Link, RouteLocation, useLocation } from "@builder.io/qwik-city";
 
 const LocaleLink = ({
   locale,
-  currentLocale,
+  location,
 }: {
   locale: string;
-  currentLocale: string;
+  location: RouteLocation;
 }) => (
   <li>
-    {locale === currentLocale ? (
+    {locale === location.params.locale ? (
       <div>{locale}</div>
     ) : (
-      <a href={`?locale=${locale}`}>{locale}</a>
+      <a
+        href={`/${locale}${location.url.pathname.slice(3)}${
+          location.url.search
+        }`}
+      >
+        {locale}
+      </a>
     )}
   </li>
 );
 
 export default component$(() => {
-  const locale = getLocale();
+  const location = useLocation();
   useStylesScoped$(styles);
 
   return (
@@ -30,33 +37,15 @@ export default component$(() => {
         </a>
       </div>
       <ul>
-        <LocaleLink locale="en" currentLocale={locale} />
-        <LocaleLink locale="fr" currentLocale={locale} />
-        <LocaleLink locale="sk" currentLocale={locale} />
-        <LocaleLink locale="sp" currentLocale={locale} />
+        <LocaleLink locale="en" location={location} />
+        <LocaleLink locale="fr" location={location} />
+        <LocaleLink locale="sk" location={location} />
+        <LocaleLink locale="sp" location={location} />
         <li>
-          <a
-            href="https://qwik.builder.io/docs/components/overview/"
-            target="_blank"
-          >
-            Docs
-          </a>
+          <span>|</span>
         </li>
         <li>
-          <a
-            href="https://qwik.builder.io/examples/introduction/hello-world/"
-            target="_blank"
-          >
-            Examples
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://qwik.builder.io/tutorial/welcome/overview/"
-            target="_blank"
-          >
-            Tutorials
-          </a>
+          <Link href={$localize`/__/blog`}>{$localize`Blog`}</Link>
         </li>
       </ul>
     </header>

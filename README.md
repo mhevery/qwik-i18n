@@ -67,10 +67,10 @@ src/locale/message.sp.json
 
 ### Inline strings
 
-The strings need to be inlined into the application. This is done by running the following command:
+The strings need to be inlined into the application. This is done automatically as part of the build.client process.
 
 ```bash
-npm run i18n-translate
+npm run build.client
 ```
 
 The result of this command is that the browser chunks are generated once for each locale. For example:
@@ -88,13 +88,13 @@ dist/builld/sp/q-*.js
 npm run dev
 ```
 
-Navigate to `http://localhost:5173`. The resulting language should match your browser language. You can also override the language by adding `?lang=sk` to the URL.
+Navigate to `http://localhost:5173`. The resulting language should match your browser language. It will pick `sk` if it can't detect a language, this can happen when you run under StackBlitz for example. You can also override the language by adding `?locale=fr` to the URL.
 
 ## Building the application
 
 Here are the steps to build the application for production.
 
-```
+```sh
 npm run build.client && npm run build.server && npm run i18n-translate && npm run serve
 ```
 
