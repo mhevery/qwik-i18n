@@ -1,25 +1,32 @@
-import { component$, getLocale, useStylesScoped$ } from "@builder.io/qwik";
+import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { QwikLogo } from "../icons/qwik";
 import styles from "./header.css?inline";
+import { RouteLocation, useLocation } from "@builder.io/qwik-city";
 
 const LocaleLink = ({
   locale,
-  currentLocale,
+  location,
 }: {
   locale: string;
-  currentLocale: string;
+  location: RouteLocation;
 }) => (
   <li>
-    {locale === currentLocale ? (
+    {locale === location.params.locale ? (
       <div>{locale}</div>
     ) : (
-      <a href={`?locale=${locale}`}>{locale}</a>
+      <a
+        href={`/${locale}${location.url.pathname.slice(3)}${
+          location.url.search
+        }`}
+      >
+        {locale}
+      </a>
     )}
   </li>
 );
 
 export default component$(() => {
-  const locale = getLocale();
+  const location = useLocation();
   useStylesScoped$(styles);
 
   return (
@@ -30,10 +37,10 @@ export default component$(() => {
         </a>
       </div>
       <ul>
-        <LocaleLink locale="en" currentLocale={locale} />
-        <LocaleLink locale="fr" currentLocale={locale} />
-        <LocaleLink locale="sk" currentLocale={locale} />
-        <LocaleLink locale="sp" currentLocale={locale} />
+        <LocaleLink locale="en" location={location} />
+        <LocaleLink locale="fr" location={location} />
+        <LocaleLink locale="sk" location={location} />
+        <LocaleLink locale="sp" location={location} />
         <li>
           <a
             href="https://qwik.builder.io/docs/components/overview/"

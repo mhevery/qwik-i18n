@@ -53,11 +53,13 @@ if (!$localizeFn.TRANSLATION_BY_LOCALE) {
   });
 }
 
-const validateLocale = (locale?: string | null) => {
-  if (!locale) return;
+const validateLocale = (locale: string) => {
   if ($localizeFn.TRANSLATION_BY_LOCALE.has(locale)) return locale;
   const match = /^([^-;]+)[-;]/.exec(locale);
-  return match && $localizeFn.TRANSLATION_BY_LOCALE.has(match[1]) && match[1];
+  return (
+    (match && $localizeFn.TRANSLATION_BY_LOCALE.has(match[1]) && match[1]) ||
+    undefined
+  );
 };
 
 /**
@@ -71,17 +73,17 @@ const validateLocale = (locale?: string | null) => {
  *
  * @returns The locale to use, which will be stored in the render context.
  */
-export function extractLang(
-  acceptLanguage: string | undefined | null,
-  url: string,
-): string {
-  let locale;
-
-  if (url) locale = validateLocale(new URL(url).searchParams.get("locale"));
-  if (locale) return locale;
-
+export function extractLang(request: Request, url: URL): string {
+  // This is not really needed because we handle /locale, but it's here as an example
+  let locale = url.searchParams.get("locale") || undefined;
+  if (locale) {
+    // note that we mutate the URL here, this will update the search property
+    url.searchParams.delete("locale");
+    locale = validateLocale(locale);
+    if (locale) return locale;
+  }
   // Parse the browser accept-language header
-  const locales = acceptLanguage?.split(",");
+  const locales = request.headers.get("accept-language")?.split(",");
   if (locales)
     for (const entry of locales) {
       locale = validateLocale(entry);
