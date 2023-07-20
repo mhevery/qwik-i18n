@@ -33,7 +33,7 @@ export const onGet: RequestHandler = async ({
       // no locale
       path = pathname;
     }
-    throw redirect(301, `${guessedLocale}${path}${url.search}`);
+    throw redirect(301, `/${guessedLocale}${path}${url.search}`);
   }
 
   // Control caching for this request for best performance and to reduce hosting costs:

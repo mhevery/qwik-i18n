@@ -1,7 +1,7 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { QwikLogo } from "../icons/qwik";
 import styles from "./header.css?inline";
-import { RouteLocation, useLocation } from "@builder.io/qwik-city";
+import { Link, RouteLocation, useLocation } from "@builder.io/qwik-city";
 
 const LocaleLink = ({
   locale,
@@ -42,28 +42,10 @@ export default component$(() => {
         <LocaleLink locale="sk" location={location} />
         <LocaleLink locale="sp" location={location} />
         <li>
-          <a
-            href="https://qwik.builder.io/docs/components/overview/"
-            target="_blank"
-          >
-            Docs
-          </a>
+          <span>|</span>
         </li>
         <li>
-          <a
-            href="https://qwik.builder.io/examples/introduction/hello-world/"
-            target="_blank"
-          >
-            Examples
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://qwik.builder.io/tutorial/welcome/overview/"
-            target="_blank"
-          >
-            Tutorials
-          </a>
+          <Link href={$localize`/__/blog`}>{$localize`Blog`}</Link>
         </li>
       </ul>
     </header>
