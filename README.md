@@ -46,7 +46,7 @@ export default component$((props: { name: string }) => {
 
 ### Extracting string for translation
 
-The first step in translation is to build the application. Once the artifacts are build the the strings can be extracted for translation.
+The first step in translation is to build the application. Once the artifacts are build the strings can be extracted for translation.
 
 ```bash
 npm run build.client
@@ -76,10 +76,10 @@ npm run build.client
 The result of this command is that the browser chunks are generated once for each locale. For example:
 
 ```bash
-dist/builld/q-*.js  # Original chunks
-dist/builld/en/q-*.js
-dist/builld/fr/q-*.js
-dist/builld/sp/q-*.js
+dist/build/q-*.js  # Original chunks
+dist/build/en/q-*.js
+dist/build/fr/q-*.js
+dist/build/sp/q-*.js
 ```
 
 ## Development mode
